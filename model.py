@@ -65,13 +65,13 @@ def word(mail, final_type): # function to tokenize text
         elif final_type == 'word':
             return final_text
 
-def search(search_term, next=False, page=0,  board=0):
+def search(comp, next=False, page=0,  board=0):
     """function to search and return comments"""
     if next == False:
-        page = requests.get("https://www.nairaland.com/search?q=" + urllib.parse.quote_plus(str(search_term)) + "&board="+str(board))
+        page = requests.get("https://www.nairaland.com/search?q=" + urllib.parse.quote_plus(str(comp)) + "&board="+str(board))
     else:
         page = requests.get("https://www.nairaland.com/search/"
-                            + str(search_term) + "/0/"+str(board)+"/0/1" + str(page))
+                            + str(comp) + "/0/"+str(board)+"/0/1" + str(page))
     soup = BeautifulSoup(page.content, 'html.parser')
 
     comments = soup.findAll("div", {"class": "narrow"})
@@ -81,7 +81,7 @@ def search(search_term, next=False, page=0,  board=0):
 
 
 WordList = []
-def analysis(text):
+def analysis(comp):
     """function to evaluate sentiment"""
     try:
         j = 0
@@ -91,7 +91,7 @@ def analysis(text):
                 nextItem = False
             else:
                 nextItem = True
-            commentsCurrent = search(text, nextItem, j,  board)
+            commentsCurrent = search(comp, nextItem, j,  board)
             add_to_word_list(commentsCurrent)
             j += 1
     except:
