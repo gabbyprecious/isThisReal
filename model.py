@@ -2,7 +2,7 @@ import nltk #download the tokenizer english by python -m nltk.downloader punkt i
 import requests
 from bs4 import BeautifulSoup
 from textblob import TextBlob
-import urllib3
+import urllib
 from gingerit.gingerit import GingerIt
 from nltk.corpus import stopwords #download by python -m nltk.downloader stopwords in the cmd
 stop_words = stopwords.words("english") 
@@ -65,13 +65,14 @@ def word(mail, final_type): # function to tokenize text
         elif final_type == 'word':
             return final_text
 
-def search(comp, next=False, page=0,  board=0):
+
+def search(search_term, next=False, page=0,  board=0):
     """function to search and return comments"""
     if next == False:
-        page = requests.get("https://www.nairaland.com/search?q=" + urllib.parse.quote_plus(str(comp)) + "&board="+str(board))
+        page = requests.get("https://www.nairaland.com/search?q=" + urllib.parse.quote_plus(str(search_term)) + "&board="+str(board))
     else:
         page = requests.get("https://www.nairaland.com/search/"
-                            + str(comp) + "/0/"+str(board)+"/0/1" + str(page))
+                            + str(search_term) + "/0/"+str(board)+"/0/1" + str(page))
     soup = BeautifulSoup(page.content, 'html.parser')
 
     comments = soup.findAll("div", {"class": "narrow"})
@@ -131,14 +132,14 @@ def analysis(comp):
 #        correction = check(mail)
 #        positive, negative, neutral = (analysis(mail) + analysis(comp)) / 2 
 #        
-#       if negative < 20:
-#          n = 10
-#     elif negative >=20 and negative < 30:
+ #       if negative < 20:
+  #          n = 10
+   #     elif negative >=20 and negative < 30:
 #            n = 5
 #        elif negative >= 30:
 #            n = 0
 #            
-#        if correction < 1 :
+#        if corrections > 4 :
 #            c = 0
 #        else:
 #            c = 1
