@@ -1,12 +1,11 @@
 import nltk #download the tokenizer english by python -m nltk.downloader punkt in the cmdimport spacy
-import en_core_web_sm #install by python -m spacy download en'
+from gingerit.gingerit import GingerIt
 import requests
 from bs4 import BeautifulSoup
 from textblob import TextBlob
-import urllib
-from grammarbot import GrammarBotClient
+import urllib3
 from nltk.corpus import stopwords #download by python -m nltk.downloader stopwords in the cmd
-nlp = en_core_web_sm.load()
+
 
 def percentage(part, whole): # calculate percentage
     if whole != 0:
@@ -43,21 +42,16 @@ def add_to_word_list(strings):
 
 
 def check(mail):
-    tokens = nlp(mail)
-    count = 0
-    for sent in tokens.sents:
-        x = sent.string.strip()
-        #print(x)
-        client = GrammarBotClient()
-        res = client.check(x, 'en-GB')
-        if len(res.matches) > 0:
-            #print(res.matches)
-            count += 1
-    if count > 5:
-        return 0
-    else:
-        return 1
-
+    try:
+        f = word(mail, 'sentence')
+        corrections = 0
+        for s in f:
+            g = GingerIt()
+            h = g.parse(s)
+            corrections += len(h['corrections'])
+        return corrections
+    except:
+        print("Error while checking grammer errors in text")
 
 
 def search(search_term, next=False, page=0,  board=0):
